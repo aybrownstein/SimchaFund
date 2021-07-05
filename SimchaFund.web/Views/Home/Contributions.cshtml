@@ -1,0 +1,61 @@
+﻿@model ContributionsViewModel
+
+@section css{
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+}
+<div class="header">
+    <h1>Contributors fron the @Model.Simcha.SimchaName Simcha</h1>
+</div>
+<div class="table table-responsive"></div>
+<form method="post" action="/Home/UpdateContributions">
+    <input type="hidden" name="simchaId" value="@Model.Simcha.Id" />
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Contribute</th>
+                <th>Name</th>
+                <th>Always Include</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        @{ int i = 0;}
+        @foreach(SimchaContributor contributor in Model.Contributors)
+            {
+            <input type="hidden" name="contributors[@i].ContributorId" value="=@contributor.ContributorId" />
+            <tbody>
+                <tr>
+                    <td>
+                    @if (contributor.Amount != null)
+                {
+                    <input class="contribute" type="checkbox" name="contributors[@i].Include" checked value="true" />
+                }
+                else
+                {
+                    <input class="contribute" type="checkbox" name="contributors[@i].Include" value="true" />
+                }
+                    </td>
+                    <td>@contributor.Name</td>
+                    <td>@contributor.Balance.ToString("C")</td>
+                    <td style="text-align:center;">
+                        @if (contributor.AlwaysInclude)
+                {
+                    <span style="font-size: 25px;" class="oi oi-check"></span>
+                }
+                    </td>
+                    <td>
+                        <input type="text" name="contributors[@i].amount" class="form-control" value="@(contributor.Amount ?? 5)" />
+                    </td>
+                    @{ i++;}
+                </tr>
+            </tbody>
+            }
+    </table>
+    <div style="text-align:center;">
+        <button class="btn-lg btn-danger">Update</button>
+    </div>
+</form>
+
+@section scripts{ 
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+<script src="~/js/contributions.js"></script>
+}

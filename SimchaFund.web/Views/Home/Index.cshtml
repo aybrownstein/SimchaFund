@@ -1,0 +1,60 @@
+﻿@model SimchaModel
+
+<div class="header"><h1>Simchas</h1></div>
+
+<div class="row header">
+    <div class="col-md-4">
+        <button class="btn btn-success" id="new-simcha">Create Simcha</button>
+    </div>
+</div>
+<table class="table table-responsive table-bordered table-striped">
+    <tr>
+        <th>Contributions</th>
+        <th>Simcha Name</th>
+        <th>Contributor Count</th>
+        <th>Total</th>
+        <th>Date</th>
+    </tr>
+    @foreach (var simcha in Model.Simchas)
+    {
+        <tr>Date
+            <td><a class="btn btn-primary" href="/Home/contributions?simchaid=@simcha.Id">Contributions</a></td>
+            <td>@simcha.SimchaName</td>
+            <td>@simcha.ContributorAmount / @Model.TotalContributors</td>
+            <td>@simcha.Total.ToString("C")</td>
+            <td>@simcha.SimchaDate.ToShortDateString()</td>
+
+        </tr>
+    }
+</table>
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Simcha</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/Home/New">
+                    <div class="form-group">
+                        <label>Simcha Name</label>
+                        <input class="form-control" name="Simchaname" placeholder="Simcha Name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="Simchadate" class="form-control" id="datepicker">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" name="commit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script src="~/js/new-simcha.js"></script>
+}

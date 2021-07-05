@@ -1,0 +1,132 @@
+﻿@model ContributorsIndexViewModel
+
+<h1>Contributors</h1>
+
+<div class="row">
+    <div class="col-md-2">
+        <button class="btn btn-danger" id="new-contributor">New Contributor</button>
+    </div>
+    <div class="col-md-6">
+        <input type="text" class="form-control-sm" placeholder="search" id="search" />
+        <button class="btn btn-danger" id="clear">clear</button>
+    </div>
+    <div class="col-md-4">
+        <h3>TOTAL: @Model.Total.ToString("C")</h3>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Deposit</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Balance</th>
+            <th>Always Include</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (Contributors contributor in Model.Contributors)
+        {
+            <tr>
+                <td><button class="btn btn-success deposit-button" data-contribid="@contributor.Id">Deposit</button></td>
+                <td>@contributor.Name</td>
+                <td>@contributor.PhoneNumber</td>
+                <td>@contributor.Balance.ToString("C")</td>
+                <td style="text-align:center;">
+                    @if (contributor.AlwaysInclude)
+                    {
+                        <span style="font-size: 25px;" class="oi oi-check"></span>
+                    }
+                </td>
+                <td>
+                    <a href="/Home/History?contribid=@contributor.Id" class="btn btn-primary">Show History</a>
+                    <button data-name="@contributor.Name" data-phoneNumber="@contributor.PhoneNumber" data-id="@contributor.Id"
+                            data-always-include="@contributor.AlwaysInclude" class="btn btn-danger">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="modal fade new-contrib" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Contributor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/Home/NewContributor">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>First Name</label>
+                            <input class="form-control" id="name" name="name" placeholder="Name" type="text">
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Phone Number</label>
+                            <input class="form-control" id="contributor_phone_number" name="phoneNumber" placeholder="phoneNumber" type="text">
+                        </div>
+                        <div class="form-group col-md-6" id="initialDepositDiv">
+                            <label>Initial Deposit</label>
+                            <input type="text" class="form-control" name="initialDeposit" placeholder="Initial Deposit">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Created Date</label>
+                            <input class="form-control" id="contributor_created_at" name="date" placeholder="Date" type="date">
+                        </div>
+                        <div>
+                            <div class="form-check mt-3 ml-3">
+                                <input type="checkbox" class="form-check-input" id="contributor_always_include" name="alwaysInclude" value="true">
+                                <label class="form-check-label" for="contributor_always_include">Always Include</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade deposit" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Deposit for <span id="deposit-name"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/Home/deposit">
+                <input type="hidden" name="contributorId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" name="deposit" placeholder="Deposit Amount" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" class="form-control" id="datepicker">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <input class="btn btn-primary" name="commit" type="submit" value="Save">
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts{ 
+<script src="~/js/contributor-index.js"></script>
+}
